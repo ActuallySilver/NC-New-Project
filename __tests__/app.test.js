@@ -53,11 +53,11 @@ describe("/api", () => {
           .then(({ body: { article } }) => {
             expect(article).toEqual(
               expect.objectContaining({
-                author: expect.any(String),
-                title: expect.any(String),
+                author: "butter_bridge",
+                title: "Living in the shadow of a great man",
                 article_id: 1,
-                body: expect.any(String),
-                topic: expect.any(String),
+                body: "I find this existence challenging",
+                topic: "mitch",
                 created_at: expect.stringMatching(
                   /(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z)/
                 ),
