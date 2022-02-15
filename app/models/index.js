@@ -1,3 +1,4 @@
 const topics = require("./topics.model");
+const articles = require("./articles.model");
 
-module.exports = { topics };
+module.exports = { topics, articles };
