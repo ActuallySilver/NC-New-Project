@@ -1,8 +1,8 @@
 const express = require("express");
-const app = express();
 const controllers = require("./controllers");
-
-app.get("/api/topics", controllers.topics.getTopics);
+const app = express();
+const apiRouter = require("./routes/api.router");
+app.use("/api", apiRouter);
 
 app.all("*", controllers.errors.handle404);
 

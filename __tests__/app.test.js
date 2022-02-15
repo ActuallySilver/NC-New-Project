@@ -12,7 +12,7 @@ afterAll(() => {
 });
 
 describe("/api", () => {
-  test("Invalid path recieves back a 404", () => {
+  test("404 - recieves back 'path not found'", () => {
     return request(app)
       .get("/invalid-path")
       .expect(404)
@@ -20,9 +20,14 @@ describe("/api", () => {
         expect(msg).toBe("path not found");
       });
   });
+  describe("GET", () => {
+    test("Returns a 200 with no body", () => {
+      return request(app).get("/api").expect(200);
+    });
+  });
   describe("/topics", () => {
     describe("GET", () => {
-      test("recieves back a list of topics with slug and description", () => {
+      test("200 - recieves back a list of topics with slug and description", () => {
         return request(app)
           .get("/api/topics")
           .expect(200)
@@ -39,4 +44,5 @@ describe("/api", () => {
       });
     });
   });
+  describe("/articles", () => {});
 });
