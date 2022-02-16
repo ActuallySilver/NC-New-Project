@@ -47,6 +47,7 @@ describe("/api", () => {
   describe("/articles", () => {
     describe("/:article_id", () => {
       describe("cannot get article errors", () => {
+        //GET
         test("400 - invalid article id", () => {
           return request(app)
             .get("/api/articles/invalid-id")
@@ -63,6 +64,7 @@ describe("/api", () => {
               expect(errMsg).toBe("article not found");
             });
         });
+        //PATCH
         test("400 - invalid article id", () => {
           return request(app)
             .patch("/api/articles/invalid-id")
