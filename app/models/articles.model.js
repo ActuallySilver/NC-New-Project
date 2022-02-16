@@ -5,17 +5,9 @@ exports.selectArticleById = async (id) => {
     [id]
   );
   const [article] = articles;
-  return article;
-};
-
-exports.checkArticleById = async (id) => {
-  const { rows: articles } = await db.query(
-    "SELECT * FROM articles WHERE article_id = $1;",
-    [id]
-  );
-  const [article] = articles;
   if (!article)
     return Promise.reject({ status: 404, errMsg: "article not found" });
+  return article;
 };
 
 exports.updateArticleVotes = async (id, votes) => {
@@ -24,5 +16,7 @@ exports.updateArticleVotes = async (id, votes) => {
     [votes, id]
   );
   const [article] = articles;
+  if (!article)
+    return Promise.reject({ status: 404, errMsg: "article not found" });
   return article;
 };
