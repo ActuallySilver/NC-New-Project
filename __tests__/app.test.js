@@ -138,4 +138,24 @@ describe("/api", () => {
       });
     });
   });
+  describe("/users", () => {
+    describe("GET", () => {
+      test("200 - recieves back a list of users with username and name and avatar_url", () => {
+        return request(app)
+          .get("/api/users")
+          .expect(200)
+          .then(({ body: { users } }) => {
+            users.forEach((user) => {
+              expect(user).toEqual(
+                expect.objectContaining({
+                  username: expect.any(String),
+                  name: expect.any(String),
+                  avatar_url: expect.any(String),
+                })
+              );
+            });
+          });
+      });
+    });
+  });
 });

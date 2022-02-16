@@ -1,4 +1,3 @@
-const topics = require("./topics.model");
-const articles = require("./articles.model");
-
-module.exports = { topics, articles };
+exports.topics = require("./topics.model");
+exports.articles = require("./articles.model");
+exports.users = require("./users.model");
