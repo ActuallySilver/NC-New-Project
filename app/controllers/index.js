@@ -1,5 +1,5 @@
-const errors = require("./errors.controller");
-const topics = require("./topics.controller");
-const api = require("./api.controller");
-const articles = require("./articles.controller");
-module.exports = { errors, topics, api, articles };
+exports.errors = require("./errors.controller");
+exports.topics = require("./topics.controller");
+exports.api = require("./api.controller");
+exports.articles = require("./articles.controller");
+exports.users = require("./users.controller");

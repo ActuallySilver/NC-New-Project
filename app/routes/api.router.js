@@ -1,11 +1,16 @@
 const apiRouter = require("express").Router();
-const topicsRouter = require("./topics.router");
-const articlesRouter = require("./articles.router");
+const routers = require("./");
 const controllers = require("../controllers");
-apiRouter.use("/topics", topicsRouter);
-apiRouter.use("/articles", articlesRouter);
+
+//Extra Routers
+apiRouter.use("/topics", routers.topics);
+apiRouter.use("/articles", routers.articles);
+apiRouter.use("/users", routers.users);
+
+//All okay check for general API connection
 apiRouter.get("/", controllers.api.allOkay);
 
+//Errors
 apiRouter.use(controllers.errors.handleCustom);
 apiRouter.use(controllers.errors.handlePsql);
 
