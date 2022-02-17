@@ -24,3 +24,12 @@ exports.changeArticleVotes = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.getArticles = async (req, res, next) => {
+  try {
+    const articles = await models.articles.selectArticles();
+    res.status(200).send({ articles });
+  } catch (error) {
+    next(error);
+  }
+};
