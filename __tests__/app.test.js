@@ -140,7 +140,7 @@ describe("/api", () => {
             .get("/api/articles/1")
             .expect(200)
             .then(({ body: { article } }) => {
-              expect(article.comment_count).toBe(11);
+              expect(article.comment_count).toBe("11");
             });
         });
       });

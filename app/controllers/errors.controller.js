@@ -13,7 +13,7 @@ exports.handlePsql = (err, req, res, next) => {
       case "22P02":
         return res.status(400).send({ errMsg: "invalid article id" });
       default:
-        console.log(err.code);
+        console.log(err);
         break;
     }
   }

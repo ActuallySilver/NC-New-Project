@@ -2,11 +2,7 @@ const models = require("../models");
 exports.getArticleById = async (req, res, next) => {
   const { article_id: articleId } = req.params;
   try {
-    const [article, comments] = await Promise.all([
-      models.articles.selectArticleById(articleId),
-      models.comments.selectCommentsByArticleID(articleId),
-    ]);
-    article.comment_count = comments.length;
+    const article = await models.articles.selectArticleById(articleId);
     res.status(200).send({ article });
   } catch (error) {
     next(error);
