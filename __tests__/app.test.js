@@ -58,9 +58,7 @@ describe("/api", () => {
                   title: expect.any(String),
                   article_id: expect.any(Number),
                   topic: expect.any(String),
-                  created_at: expect.stringMatching(
-                    /(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z)/
-                  ),
+                  created_at: expect.stringMatching(/(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z)/),
                   votes: expect.any(Number),
                 })
               );
@@ -135,6 +133,14 @@ describe("/api", () => {
                   votes: expect.any(Number),
                 })
               );
+            });
+        });
+        test("200 - each article has a comment_count property", () => {
+          return request(app)
+            .get("/api/articles/1")
+            .expect(200)
+            .then(({ body: { article } }) => {
+              expect(article.comment_count).toBe(11);
             });
         });
       });
