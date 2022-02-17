@@ -144,6 +144,7 @@ describe("/api", () => {
               .get("/api/articles/1/comments")
               .expect(200)
               .then(({ body: { comments } }) => {
+                expect(comments.length).toBe(11);
                 comments.forEach((comment) => {
                   expect(comment).toEqual(
                     expect.objectContaining({
@@ -155,6 +156,22 @@ describe("/api", () => {
                     })
                   );
                 });
+              });
+          });
+          test("200 - gets back empty list if an article has no comments", () => {
+            return request(app)
+              .get("/api/articles/2/comments")
+              .expect(200)
+              .then(({ body: { comments } }) => {
+                expect(comments.length).toBe(0);
+              });
+          });
+          test("404 - if article entered does not exist", () => {
+            return request(app)
+              .get("/api/articles/99/comments")
+              .expect(404)
+              .then(({ body: { errMsg } }) => {
+                expect(errMsg).toBe("article not found");
               });
           });
         });
