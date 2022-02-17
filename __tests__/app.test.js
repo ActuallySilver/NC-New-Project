@@ -45,6 +45,37 @@ describe("/api", () => {
     });
   });
   describe("/articles", () => {
+    describe("GET", () => {
+      test("200 - recieves back an article with required properties", () => {
+        return request(app)
+          .get("/api/articles")
+          .expect(200)
+          .then(({ body: { articles } }) => {
+            articles.forEach((article) => {
+              expect(article).toEqual(
+                expect.objectContaining({
+                  author: expect.any(String),
+                  title: expect.any(String),
+                  article_id: expect.any(Number),
+                  topic: expect.any(String),
+                  created_at: expect.stringMatching(
+                    /(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z)/
+                  ),
+                  votes: expect.any(Number),
+                })
+              );
+            });
+          });
+      });
+      test("articles are ordered by date of decending order", () => {
+        return request(app)
+          .get("/api/articles")
+          .expect(200)
+          .then(({ body: { articles } }) => {
+            expect(articles).toBeSortedBy("created_at", { descending: true });
+          });
+      });
+    });
     describe("/:article_id", () => {
       describe("cannot get article errors", () => {
         //GET

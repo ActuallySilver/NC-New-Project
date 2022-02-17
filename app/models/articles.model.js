@@ -20,3 +20,10 @@ exports.updateArticleVotes = async (id, votes) => {
     return Promise.reject({ status: 404, errMsg: "article not found" });
   return article;
 };
+
+exports.selectArticles = async () => {
+  const { rows: articles } = await db.query(
+    "SELECT author, title, article_id, topic, created_at, votes FROM articles ORDER BY created_at DESC;"
+  );
+  return articles;
+};
