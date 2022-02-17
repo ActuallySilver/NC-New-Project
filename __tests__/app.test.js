@@ -78,41 +78,44 @@ describe("/api", () => {
     });
     describe("/:article_id", () => {
       describe("cannot get article errors", () => {
-        //GET
-        test("400 - invalid article id", () => {
-          return request(app)
-            .get("/api/articles/invalid-id")
-            .expect(400)
-            .then(({ body: { errMsg } }) => {
-              expect(errMsg).toBe("invalid article id");
-            });
+        describe("GET", () => {
+          test("400 - invalid article id", () => {
+            return request(app)
+              .get("/api/articles/invalid-id")
+              .expect(400)
+              .then(({ body: { errMsg } }) => {
+                expect(errMsg).toBe("invalid article id");
+              });
+          });
+          test("404 - article not found", () => {
+            return request(app)
+              .get("/api/articles/7400")
+              .expect(404)
+              .then(({ body: { errMsg } }) => {
+                expect(errMsg).toBe("article not found");
+              });
+          });
         });
-        test("404 - article not found", () => {
-          return request(app)
-            .get("/api/articles/7400")
-            .expect(404)
-            .then(({ body: { errMsg } }) => {
-              expect(errMsg).toBe("article not found");
-            });
-        });
-        //PATCH
-        test("400 - invalid article id", () => {
-          return request(app)
-            .patch("/api/articles/invalid-id")
-            .send({ inc_votes: 10 })
-            .expect(400)
-            .then(({ body: { errMsg } }) => {
-              expect(errMsg).toBe("invalid article id");
-            });
-        });
-        test("404 - article not found", () => {
-          return request(app)
-            .patch("/api/articles/7400")
-            .send({ inc_votes: 10 })
-            .expect(404)
-            .then(({ body: { errMsg } }) => {
-              expect(errMsg).toBe("article not found");
-            });
+        describe("PATCH", () => {
+          //PATCH
+          test("400 - invalid article id", () => {
+            return request(app)
+              .patch("/api/articles/invalid-id")
+              .send({ inc_votes: 10 })
+              .expect(400)
+              .then(({ body: { errMsg } }) => {
+                expect(errMsg).toBe("invalid article id");
+              });
+          });
+          test("404 - article not found", () => {
+            return request(app)
+              .patch("/api/articles/7400")
+              .send({ inc_votes: 10 })
+              .expect(404)
+              .then(({ body: { errMsg } }) => {
+                expect(errMsg).toBe("article not found");
+              });
+          });
         });
       });
       describe("GET", () => {
@@ -128,9 +131,7 @@ describe("/api", () => {
                   article_id: 1,
                   body: "I find this existence challenging",
                   topic: "mitch",
-                  created_at: expect.stringMatching(
-                    /(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z)/
-                  ),
+                  created_at: expect.stringMatching(/(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z)/),
                   votes: expect.any(Number),
                 })
               );
@@ -152,9 +153,7 @@ describe("/api", () => {
                   author: "butter_bridge",
                   body: "I find this existence challenging",
                   votes: 110,
-                  created_at: expect.stringMatching(
-                    /(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z)/
-                  ),
+                  created_at: expect.stringMatching(/(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z)/),
                 })
               );
             });
@@ -167,6 +166,45 @@ describe("/api", () => {
             .then(({ body: { errMsg } }) => {
               expect(errMsg).toBe("no inc_votes present");
             });
+        });
+      });
+      describe("/comments", () => {
+        describe("GET", () => {
+          test("200 - recieves back a list of comments on the article", () => {
+            return request(app)
+              .get("/api/articles/1/comments")
+              .expect(200)
+              .then(({ body: { comments } }) => {
+                expect(comments.length).toBe(11);
+                comments.forEach((comment) => {
+                  expect(comment).toEqual(
+                    expect.objectContaining({
+                      body: expect.any(String),
+                      votes: expect.any(Number),
+                      author: expect.any(String),
+                      comment_id: expect.any(Number),
+                      created_at: expect.stringMatching(/(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z)/),
+                    })
+                  );
+                });
+              });
+          });
+          test("200 - gets back empty list if an article has no comments", () => {
+            return request(app)
+              .get("/api/articles/2/comments")
+              .expect(200)
+              .then(({ body: { comments } }) => {
+                expect(comments.length).toBe(0);
+              });
+          });
+          test("404 - if article entered does not exist", () => {
+            return request(app)
+              .get("/api/articles/99/comments")
+              .expect(404)
+              .then(({ body: { errMsg } }) => {
+                expect(errMsg).toBe("article not found");
+              });
+          });
         });
       });
     });
