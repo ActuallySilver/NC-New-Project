@@ -10,15 +10,11 @@ exports.getArticleById = async (req, res, next) => {
 };
 
 exports.changeArticleVotes = async (req, res, next) => {
-  if (!req.body.inc_votes)
-    return next({ status: 400, errMsg: "no inc_votes present" });
+  if (!req.body.inc_votes) return next({ status: 400, errMsg: "no inc_votes present" });
   const { article_id: articleId } = req.params;
   const { inc_votes } = req.body;
   try {
-    const article = await models.articles.updateArticleVotes(
-      articleId,
-      inc_votes
-    );
+    const article = await models.articles.updateArticleVotes(articleId, inc_votes);
     res.status(200).send({ article });
   } catch (error) {
     next(error);
