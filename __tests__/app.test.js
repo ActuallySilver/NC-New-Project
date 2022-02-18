@@ -58,9 +58,7 @@ describe("/api", () => {
                   title: expect.any(String),
                   article_id: expect.any(Number),
                   topic: expect.any(String),
-                  created_at: expect.stringMatching(
-                    /(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z)/
-                  ),
+                  created_at: expect.stringMatching(/(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z)/),
                   votes: expect.any(Number),
                 })
               );
@@ -203,6 +201,61 @@ describe("/api", () => {
               .expect(404)
               .then(({ body: { errMsg } }) => {
                 expect(errMsg).toBe("article not found");
+              });
+          });
+        });
+        describe("POST", () => {
+          test("201 - Responds back with the newly created comment", () => {
+            return request(app)
+              .post("/api/articles/1/comments")
+              .expect(201)
+              .send({ username: "rogersop", body: "Test Body" })
+              .then(({ body: { comment } }) => {
+                expect(comment).toEqual(
+                  expect.objectContaining({
+                    body: "Test Body",
+                    votes: expect.any(Number),
+                    author: "rogersop",
+                    article_id: 1,
+                    created_at: expect.stringMatching(/(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z)/),
+                  })
+                );
+              });
+          });
+          test("400 - Did not contain the required properties of username and body", () => {
+            return request(app)
+              .post("/api/articles/1/comments")
+              .expect(400)
+              .send({ body: "Test Body" })
+              .then(({ body: { errMsg } }) => {
+                expect(errMsg).toBe("required inputs not given");
+              });
+          });
+          test("404 - article not found", () => {
+            return request(app)
+              .post("/api/articles/1000/comments")
+              .expect(404)
+              .send({ body: "Test Body", username: "rogersop" })
+              .then(({ body: { errMsg } }) => {
+                expect(errMsg).toBe("article not found");
+              });
+          });
+          test("400 - invalid article id", () => {
+            return request(app)
+              .post("/api/articles/invalid-id/comments")
+              .expect(400)
+              .send({ body: "Test Body", username: "rogersop" })
+              .then(({ body: { errMsg } }) => {
+                expect(errMsg).toBe("invalid article id");
+              });
+          });
+          test("400 - author not found", () => {
+            return request(app)
+              .post("/api/articles/1/comments")
+              .expect(404)
+              .send({ body: "Test Body", username: "rogersssop" })
+              .then(({ body: { errMsg } }) => {
+                expect(errMsg).toBe("author not found");
               });
           });
         });
