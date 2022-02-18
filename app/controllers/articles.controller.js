@@ -23,7 +23,8 @@ exports.changeArticleVotes = async (req, res, next) => {
 
 exports.getArticles = async (req, res, next) => {
   try {
-    const articles = await models.articles.selectArticles();
+    const { sort_by, order, topic } = req.query;
+    const articles = await models.articles.selectArticles(sort_by, order, topic);
     res.status(200).send({ articles });
   } catch (error) {
     next({ error, type: "article" });
