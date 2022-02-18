@@ -2,23 +2,27 @@ exports.handle404 = (req, res) => {
   res.status(404).send({ errMsg: "path not found" });
 };
 exports.handleCustom = (err, req, res, next) => {
-  if (err.errMsg) {
-    return res.status(err.status).send({ errMsg: err.errMsg });
+  const { error } = err;
+  if (error.errMsg) {
+    return res.status(error.status).send({ errMsg: error.errMsg });
   }
   next(err);
 };
 exports.handlePsql = (err, req, res, next) => {
-  if (err.code) {
-    switch (err.code) {
+  const { error, type } = err;
+  if (error.code) {
+    switch (error.code) {
       case "22P02":
-        return res.status(400).send({ errMsg: "invalid article id" });
+        if (type === "article") return res.status(400).send({ errMsg: "invalid article id" });
+        if (type === "comment") return res.status(400).send({ errMsg: "invalid comment id" });
+        return res.status(400).send({ errMsg: "invalid id" });
       case "23503":
-        if (err.constraint === "comments_author_fkey") return res.status(404).send({ errMsg: "author not found" });
-        if (err.constraint === "comments_article_id_fkey") return res.status(404).send({ errMsg: "article not found" });
+        if (error.constraint === "comments_author_fkey") return res.status(404).send({ errMsg: "author not found" });
+        if (error.constraint === "comments_article_id_fkey") return res.status(404).send({ errMsg: "article not found" });
       case "23502":
         return res.status(400).send({ errMsg: "required inputs not given" });
       default:
-        console.log(err);
+        console.log(error);
         break;
     }
   }

@@ -6,6 +6,7 @@ const controllers = require("../controllers");
 apiRouter.use("/topics", routers.topics);
 apiRouter.use("/articles", routers.articles);
 apiRouter.use("/users", routers.users);
+apiRouter.use("/comments", routers.comments);
 
 //All okay check for general API connection
 apiRouter.get("/", controllers.api.allOkay);

@@ -362,4 +362,34 @@ describe("/api", () => {
       });
     });
   });
+  describe("/comments", () => {
+    describe("/:comment_id", () => {
+      describe("DELETE", () => {
+        test("204 - Deleted comment successfully", () => {
+          return request(app)
+            .delete("/api/comments/1")
+            .expect(204)
+            .then(({ body }) => {
+              expect(body).toEqual({});
+            });
+        });
+        test("400 - invalid comment id", () => {
+          return request(app)
+            .delete("/api/comments/invalid-id")
+            .expect(400)
+            .then(({ body: { errMsg } }) => {
+              expect(errMsg).toBe("invalid comment id");
+            });
+        });
+        test("404 - comment id not found", () => {
+          return request(app)
+            .delete("/api/comments/90119")
+            .expect(404)
+            .then(({ body: { errMsg } }) => {
+              expect(errMsg).toBe("comment not found");
+            });
+        });
+      });
+    });
+  });
 });
