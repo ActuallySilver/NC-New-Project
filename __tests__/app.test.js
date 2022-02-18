@@ -83,6 +83,68 @@ describe("/api", () => {
             });
           });
       });
+      describe("Queries", () => {
+        describe("can sort by column name", () => {
+          test("200 - sort by author returns array of articles sorted by author descending", () => {
+            return request(app)
+              .get("/api/articles?sort_by=author")
+              .expect(200)
+              .then(({ body: { articles } }) => {
+                expect(articles).toBeSortedBy("author", { descending: true });
+              });
+          });
+          test("400 - invalid column name error is returned", () => {
+            return request(app)
+              .get("/api/articles?sort_by=invalid-sort")
+              .expect(400)
+              .then(({ body: { errMsg } }) => {
+                expect(errMsg).toBe("invalid sort_by");
+              });
+          });
+        });
+        describe("can order by asc or desc", () => {
+          test("200 - sort by author ASC returns array of articles sorted by author ascending", () => {
+            return request(app)
+              .get("/api/articles?sort_by=author&order=ASC")
+              .expect(200)
+              .then(({ body: { articles } }) => {
+                expect(articles).toBeSortedBy("author");
+              });
+          });
+          test("400 - invalid order type error is returned", () => {
+            return request(app)
+              .get("/api/articles?order=invalid-order")
+              .expect(400)
+              .then(({ body: { errMsg } }) => {
+                expect(errMsg).toBe("invalid order");
+              });
+          });
+        });
+        describe("can filter by topic type", () => {
+          test("200 - topic=mitch returns array of articles only with the topic", () => {
+            return request(app)
+              .get("/api/articles?topic=mitch")
+              .expect(200)
+              .then(({ body: { articles } }) => {
+                articles.forEach((article) => {
+                  expect(article).toEqual(
+                    expect.objectContaining({
+                      topic: "mitch",
+                    })
+                  );
+                });
+              });
+          });
+          test("404 - invalid topic type error is returned", () => {
+            return request(app)
+              .get("/api/articles?topic=not-topic")
+              .expect(404)
+              .then(({ body: { errMsg } }) => {
+                expect(errMsg).toBe("topic not found");
+              });
+          });
+        });
+      });
     });
     describe("/:article_id", () => {
       describe("cannot get article errors", () => {
@@ -150,7 +212,7 @@ describe("/api", () => {
             .get("/api/articles/1")
             .expect(200)
             .then(({ body: { article } }) => {
-              expect(article.comment_count).toBe("11");
+              expect(article.comment_count).toBe(11);
             });
         });
       });
