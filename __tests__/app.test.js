@@ -58,9 +58,7 @@ describe("/api", () => {
                   title: expect.any(String),
                   article_id: expect.any(Number),
                   topic: expect.any(String),
-                  created_at: expect.stringMatching(
-                    /(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z)/
-                  ),
+                  created_at: expect.stringMatching(/(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z)/),
                   votes: expect.any(Number),
                 })
               );
@@ -73,6 +71,16 @@ describe("/api", () => {
           .expect(200)
           .then(({ body: { articles } }) => {
             expect(articles).toBeSortedBy("created_at", { descending: true });
+          });
+      });
+      test("200 - each article has a comment_count property", () => {
+        return request(app)
+          .get("/api/articles")
+          .expect(200)
+          .then(({ body: { articles } }) => {
+            articles.forEach((article) => {
+              expect(article.comment_count).toEqual(expect.any(Number));
+            });
           });
       });
     });
