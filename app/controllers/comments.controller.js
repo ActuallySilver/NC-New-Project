@@ -24,7 +24,7 @@ exports.PostCommentByArticleID = async (req, res, next) => {
 exports.removeCommentByID = async (req, res, next) => {
   try {
     const { comment_id } = req.params;
-    await models.comments.deleteCommentByID(comment_id);
+    const comment = await models.comments.deleteCommentByID(comment_id);
     res.status(204).send();
   } catch (error) {
     next({ error, type: "comment" });

@@ -319,6 +319,14 @@ describe("/api", () => {
               expect(errMsg).toBe("invalid comment id");
             });
         });
+        test("404 - comment id not found", () => {
+          return request(app)
+            .delete("/api/comments/90119")
+            .expect(404)
+            .then(({ body: { errMsg } }) => {
+              expect(errMsg).toBe("comment not found");
+            });
+        });
       });
     });
   });
