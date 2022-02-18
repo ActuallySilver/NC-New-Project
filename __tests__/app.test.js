@@ -145,6 +145,14 @@ describe("/api", () => {
               );
             });
         });
+        test("200 - each article has a comment_count property", () => {
+          return request(app)
+            .get("/api/articles/1")
+            .expect(200)
+            .then(({ body: { article } }) => {
+              expect(article.comment_count).toBe("11");
+            });
+        });
       });
       describe("PATCH", () => {
         test("200 - recieves back the article with the correct values after being altered", () => {
