@@ -13,7 +13,6 @@ exports.handlePsql = (err, req, res, next) => {
       case "22P02":
         return res.status(400).send({ errMsg: "invalid article id" });
       case "23503":
-        console.log(err.constraint);
         if (err.constraint === "comments_author_fkey") return res.status(404).send({ errMsg: "author not found" });
         if (err.constraint === "comments_article_id_fkey") return res.status(404).send({ errMsg: "article not found" });
       case "23502":

@@ -214,7 +214,7 @@ describe("/api", () => {
                 expect(comment).toEqual(
                   expect.objectContaining({
                     body: "Test Body",
-                    votes: expect.any(Number),
+                    votes: 0,
                     author: "rogersop",
                     article_id: 1,
                     created_at: expect.stringMatching(/(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z)/),
@@ -249,7 +249,7 @@ describe("/api", () => {
                 expect(errMsg).toBe("invalid article id");
               });
           });
-          test("400 - author not found", () => {
+          test("404 - author not found", () => {
             return request(app)
               .post("/api/articles/1/comments")
               .expect(404)
