@@ -73,6 +73,16 @@ describe("/api", () => {
             expect(articles).toBeSortedBy("created_at", { descending: true });
           });
       });
+      test("200 - each article has a comment_count property", () => {
+        return request(app)
+          .get("/api/articles")
+          .expect(200)
+          .then(({ body: { articles } }) => {
+            articles.forEach((article) => {
+              expect(article.comment_count).toEqual(expect.any(Number));
+            });
+          });
+      });
     });
     describe("/:article_id", () => {
       describe("cannot get article errors", () => {

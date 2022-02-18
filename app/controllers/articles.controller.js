@@ -26,6 +26,7 @@ exports.getArticles = async (req, res, next) => {
     const articles = await models.articles.selectArticles();
     res.status(200).send({ articles });
   } catch (error) {
+    console.log(error);
     next(error);
   }
 };
