@@ -15,3 +15,6 @@ exports.insertCommentByArticleID = async (id, username, body) => {
   ]);
   return comment;
 };
+exports.deleteCommentByID = (id) => {
+  return db.query("DELETE FROM comments WHERE comment_id = $1", [id]);
+};
