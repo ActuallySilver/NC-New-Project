@@ -21,18 +21,14 @@ describe("/api", () => {
       });
   });
   describe("GET", () => {
-    test("Returns a 200 with no body", () => {
+    test("Returns a 200 with no information on endpoints", () => {
       return request(app)
         .get("/api")
         .expect(200)
         .then(({ body }) => {
           expect(body).toEqual(
             expect.objectContaining({
-              endpoints: {
-                "GET /api": expect.any(Object),
-                "GET /api/topics": expect.any(Object),
-                "GET /api/articles": expect.any(Object),
-              },
+              endpoints: expect.any(Object),
             })
           );
         });
