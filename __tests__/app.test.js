@@ -102,6 +102,14 @@ describe("/api", () => {
                 expect(articles).toBeSortedBy("author", { descending: true });
               });
           });
+          test("200 - sort by author returns array of articles sorted by comment_count descending", () => {
+            return request(app)
+              .get("/api/articles?sort_by=comment_count")
+              .expect(200)
+              .then(({ body: { articles } }) => {
+                expect(articles).toBeSortedBy("comment_count", { descending: true });
+              });
+          });
           test("400 - invalid column name error is returned", () => {
             return request(app)
               .get("/api/articles?sort_by=invalid-sort")

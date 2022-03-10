@@ -34,7 +34,7 @@ exports.selectArticles = async (sort_by = "created_at", order = "DESC", topic) =
   if (availableQueries.topic.indexOf(topic) !== -1) queryStr += ` WHERE articles.topic = '${topic}'`;
   else if (topic) return Promise.reject({ status: 404, errMsg: "topic not found" });
   queryStr += " GROUP BY articles.article_id";
-  if (availableQueries.sort_by.indexOf(sort_by) !== -1) queryStr += ` ORDER BY articles.${sort_by}`;
+  if (availableQueries.sort_by.indexOf(sort_by) !== -1) queryStr += ` ORDER BY ${sort_by}`;
   else return Promise.reject({ status: 400, errMsg: "invalid sort_by" });
   if (availableQueries.order.indexOf(order) !== -1) queryStr += ` ${order}`;
   else return Promise.reject({ status: 400, errMsg: "invalid order" });
