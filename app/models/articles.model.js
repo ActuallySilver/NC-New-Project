@@ -24,7 +24,7 @@ exports.updateArticleVotes = async (id, votes) => {
 
 exports.selectArticles = async (sort_by = "created_at", order = "DESC", topic) => {
   const availableQueries = {
-    sort_by: ["title", "topic", "author", "body", "created_at", "votes"],
+    sort_by: ["title", "topic", "author", "body", "created_at", "votes", "comment_count"],
     order: ["ASC", "DESC"],
     topic: (await selectTopics()).map((topic) => topic.slug),
   };
